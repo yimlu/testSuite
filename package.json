@@ -1,10 +1,14 @@
 {
-  "name": "test-suite",
+  "name": "xemi-test-suite",
   "version": "0.0.1",
   "description": "A nodejs test suite to do automation api test work.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yimlu/testSuite.git"
   },
   "author": "yimlu",
   "license": "MIT",
