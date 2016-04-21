@@ -1,0 +1,14 @@
+{
+  "name": "test-suite",
+  "version": "0.0.1",
+  "description": "A nodejs test suite to do automation api test work.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yimlu",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
+}
