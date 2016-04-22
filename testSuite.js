@@ -89,13 +89,16 @@ var testRunner = (function(){
 					else{
 						error("[FAIL] "+testCase.name+"\n");
 						warning("The response data is:\n");
+						
+						process.stdout.write(colors.yellow(d));
+						
+						
 						if(assertResult.brokenRules != null && assertResult.brokenRules.length>0){
+							warning("\n\nBroken rules:\n");
 							for(var i=0;i<assertResult.brokenRules.length;i++){
 								warning(assertResult.brokenRules[i].message + "\n");
 							}
 						}
-						process.stdout.write(colors.yellow(d));
-						
 					}
 				});
 		});
