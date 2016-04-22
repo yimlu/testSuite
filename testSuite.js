@@ -38,8 +38,33 @@ var testRunner = (function(){
 		console.log(colors.yellow(message));
 	}
 	
-	var run = function(testCase){
+	function runAsserts(asserts,res){
+
+		//convert string to json object
+		var json = eval("(" + res + ")");
 		
+		var ret = {};
+		ret.success = true;
+		ret.brokenRules = [];
+		
+		if(asserts == null || asserts.length == 0)
+			return ret;
+		for(var i = 0;i<asserts.length;i++){
+			if(asserts[i] == null){
+				throw "Illegle assert object";
+			}
+			var result = asserts[i].fn(json);
+			ret.success = ret.success && result;
+			if(!result){
+				ret.brokenRules.push({
+					"message":asserts[i].message
+				});
+			}
+		}
+		return ret;
+	}
+	
+	var run = function(testCase){
 		var requestOptions = {
 			"host":testCase.host,
 			"port":testCase.port,
@@ -54,17 +79,28 @@ var testRunner = (function(){
 		var req = https.request(requestOptions,function(response){
 			response.setEncoding('utf8');
 			response.on("data",function(d){
-					if(response.statusCode >= 200 && response.statusCode<= 299){
+					//run asserts
+					
+					var assertResult = runAsserts(testCase.asserts,d);
+										
+					if(response.statusCode >= 200 && response.statusCode<= 299 && assertResult.success){
 						success("[PASS] "+testCase.name+"\n");
 					}
 					else{
 						error("[FAIL] "+testCase.name+"\n");
 						warning("The response data is:\n");
+						if(assertResult.brokenRules != null && assertResult.brokenRules.length>0){
+							for(var i=0;i<assertResult.brokenRules.length;i++){
+								warning(assertResult.brokenRules[i].message + "\n");
+							}
+						}
 						process.stdout.write(colors.yellow(d));
+						
 					}
 				});
 		});
 		
+
 		req.write(testCase.data);
 		
 		req.end();
